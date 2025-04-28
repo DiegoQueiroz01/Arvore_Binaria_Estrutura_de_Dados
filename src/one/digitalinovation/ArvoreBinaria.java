@@ -26,41 +26,41 @@ public class ArvoreBinaria<T extends Comparable<T>> {
     }
 
     public void exibirInOrdem(){
-        System.out.println("\n Exibindo InOrdem");
+        System.out.print("\n Exibindo InOrdem");
         exibirInOrdem(this.raiz);
     }
 
     private void exibirInOrdem(binNo<T> atual){
         if(atual != null){
             exibirInOrdem(atual.getNoEsquerdo());
-            System.out.println(atual.getConteudo() + ",");
+            System.out.print(atual.getConteudo() + ",");
             exibirInOrdem(atual.getNoDireito());
         }
     }
     public void exibirPreOrdem(){
-        System.out.println("\n Exibindo PreOrdem");
+        System.out.print("\n Exibindo PreOrdem");
         exibirPreOrdem(this.raiz);
     }
     private void exibirPreOrdem(binNo<T> atual){
         if(atual != null){
-            System.out.println(atual.getConteudo() + ",");
+            System.out.print(atual.getConteudo() + ",");
             exibirPreOrdem(atual.getNoEsquerdo());
             exibirPreOrdem(atual.getNoDireito());
         }
     }
     public void exibirPosOrdem(){
-        System.out.println("\n Exibindo PosOrdem");
+        System.out.print("\n Exibindo PosOrdem");
         exibirPosOrdem(this.raiz);
     }
     private void exibirPosOrdem(binNo<T> atual){
         if(atual != null){
             exibirPosOrdem(atual.getNoEsquerdo());
             exibirPosOrdem(atual.getNoDireito());
-            System.out.println(atual.getConteudo() + ",");
+            System.out.print(atual.getConteudo() + ",");
         }
     }
 
-    public void removerr(T conteudo){
+    public void remover(T conteudo){
         try{
             binNo<T> atual = this.raiz;
             binNo<T> pai = null;
@@ -79,8 +79,64 @@ public class ArvoreBinaria<T extends Comparable<T>> {
             if(atual == null){
                 System.out.println("Conteúdo não encontrado. Bloco try.");
             }
+            if(pai == null){
+                if(atual.getNoDireito() == null){
+                    this.raiz = atual.getNoEsquerdo();
+                }
+                else if(atual.getNoEsquerdo() == null){
+                    this.raiz = atual.getNoDireito();
+                }
+                else{
+                    for(temp = atual, filho = atual.getNoEsquerdo();
+                    filho.getNoDireito() != null;
+                    temp = filho, filho = filho.getNoEsquerdo()
+                    ){
+                        if(filho != atual.getNoEsquerdo()){
+                            temp.setNoDireito(filho.getNoEsquerdo());
+                            filho.setNoEsquerdo(raiz.getNoEsquerdo());
+                        }
+                    }
+                    filho.setNoDireito(raiz.getNoDireito());
+                    raiz = filho;
+                }
+            }
+            else if(atual.getNoDireito() == null){
+                if(pai.getNoEsquerdo() == atual){
+                    pai.setNoEsquerdo(atual.getNoEsquerdo());
+                }
+                else{
+                    pai.setNoDireito(atual.getNoEsquerdo());
+                }
+            }
+            else if (atual.getNoEsquerdo() == null){
+                if(pai.getNoEsquerdo() == atual){
+                    pai.setNoEsquerdo(atual.getNoDireito());
+                }
+                else{
+                    pai.setNoDireito(atual.getNoDireito());
+                }
+            }
+            else{
+                for(
+                    temp = atual, filho = atual.getNoEsquerdo();
+                    filho.getNoDireito() != null;
+                    temp = filho, filho = filho.getNoDireito()
+                ){
+                    if(filho != atual.getNoEsquerdo()){
+                        temp.setNoDireito(filho.getNoEsquerdo());
+                        filho.setNoEsquerdo(atual.getNoEsquerdo());
+                    }
+                    filho.setNoDireito(atual.getNoDireito());
+                    if(pai.getNoEsquerdo() == atual){
+                        pai.setNoEsquerdo(filho);
+                    }
+                    else{
+                        pai.setNoDireito(filho);
+                    }
+                }
+            }
         }catch (NullPointerException e){
-            System.out.println("Conteúdo não encontrado. Bloco catch.");
+            System.out.print("Conteúdo não encontrado. Bloco catch.");
         }
     }
 }
